@@ -170,34 +170,40 @@ namespace GemBox
         #region IDictionary<string, TValue> implementation
 
         /// <summary>
-        /// Retourne un énumérateur qui parcourt le dictionnaire
+        /// Returns an enumerator that iterates through the collection.
         /// </summary>
-        /// <returns>Un énumerateur pour parcourir le dictionnaire</returns>
+        /// <returns>
+        /// A <see cref="T:System.Collections.Generic.IEnumerator`1"/> that can be used to iterate through the collection.
+        /// </returns>
+        /// <filterpriority>1</filterpriority>
         public IEnumerator<KeyValuePair<string, TValue>> GetEnumerator()
         {
             return Enumerate(_rootNode, null).GetEnumerator();
         }
 
         /// <summary>
-        /// Retourne un énumérateur qui parcourt le dictionnaire
+        /// Returns an enumerator that iterates through a collection.
         /// </summary>
-        /// <returns>Un énumerateur pour parcourir le dictionnaire</returns>
+        /// <returns>
+        /// An <see cref="T:System.Collections.IEnumerator"/> object that can be used to iterate through the collection.
+        /// </returns>
+        /// <filterpriority>2</filterpriority>
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
         }
 
         /// <summary>
-        /// Ajoute la paire clé/valeur spécifiée au dictionnaire 
+        /// Adds the specified value to the <see cref="ICollection{T}"/> with the specified key.
         /// </summary>
-        /// <param name="item">Paire clé/valeur à ajouter</param>
+        /// <param name="item">The key/value pair to add to the <see cref="Trie{TValue}"/>.</param>
         void ICollection<KeyValuePair<string, TValue>>.Add(KeyValuePair<string, TValue> item)
         {
             Add(item.Key, item.Value);
         }
 
         /// <summary>
-        /// Supprime toutes les clés et les valeurs du dictionnaire.
+        /// Removes all keys and values from the <see cref="Trie{TValue}"/>.
         /// </summary>
         public void Clear()
         {
@@ -207,10 +213,12 @@ namespace GemBox
         }
 
         /// <summary>
-        /// Détermine si le dictionnaire contient la paire clé/valeur spécifiée.
+        /// Determines whether the <see cref="ICollection{T}"/> contains a specific key and value.
         /// </summary>
-        /// <param name="item">Paire clé/valeur recherchée</param>
-        /// <returns>true si le dictionnaire contient la paire clé/valeur, false sinon</returns>
+        /// <returns>
+        /// true if <paramref name="item"/> is found in the <see cref="ICollection{T}"/>; otherwise, false.
+        /// </returns>
+        /// <param name="item">The object to locate in the <see cref="ICollection{T}"/>.</param>
         bool ICollection<KeyValuePair<string, TValue>>.Contains(KeyValuePair<string, TValue> item)
         {
             TValue value;
@@ -220,10 +228,12 @@ namespace GemBox
         }
 
         /// <summary>
-        /// Copie les éléments du dictionnaire dans un tableau, à partir de la position spécifiée
+        /// Copies the elements of the <see cref="T:System.Collections.Generic.ICollection`1"/> to an <see cref="T:System.Array"/>, starting at a particular <see cref="T:System.Array"/> index.
         /// </summary>
-        /// <param name="array">Tableau de destination</param>
-        /// <param name="arrayIndex">Index du tableau où commencer la copie</param>
+        /// <param name="array">The one-dimensional <see cref="T:System.Array"/> that is the destination of the elements copied from <see cref="T:System.Collections.Generic.ICollection`1"/>. The <see cref="T:System.Array"/> must have zero-based indexing.</param><param name="arrayIndex">The zero-based index in <paramref name="array"/> at which copying begins.</param>
+        /// <exception cref="T:System.ArgumentNullException"><paramref name="array"/> is null.</exception>
+        /// <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="arrayIndex"/> is less than 0.</exception>
+        /// <exception cref="T:System.ArgumentException">The number of elements in the source <see cref="T:System.Collections.Generic.ICollection`1"/> is greater than the available space from <paramref name="arrayIndex"/> to the end of the destination <paramref name="array"/>.</exception>
         void ICollection<KeyValuePair<string, TValue>>.CopyTo(KeyValuePair<string, TValue>[] array, int arrayIndex)
         {
             if (_count + arrayIndex > array.Length)
@@ -237,10 +247,12 @@ namespace GemBox
         }
 
         /// <summary>
-        /// Supprime du dictionnaire la paire clé/valeur spécifiée.
+        /// Removes a key and value from the <see cref="Trie{TValue}"/>.
         /// </summary>
-        /// <param name="item">Paire clé/valeur</param>
-        /// <returns>true si la recherche et la suppression de l'élément réussissent ; sinon, false.</returns>
+        /// <returns>
+        /// true if <paramref name="item"/> was successfully removed from the <see cref="Trie{TValue}"/>; otherwise, false. This method also returns false if <paramref name="item"/> is not found in the original <see cref="Trie{TValue}"/>.
+        /// </returns>
+        /// <param name="item">The key/value pair to remove from the <see cref="Trie{TValue}"/>.</param>
         bool ICollection<KeyValuePair<string, TValue>>.Remove(KeyValuePair<string, TValue> item)
         {
             var node = FindNode(item.Key, false);
@@ -256,26 +268,35 @@ namespace GemBox
         }
 
         /// <summary>
-        /// Obtient le nombre de paires clé/valeur contenues dans le dictionnaire.
+        /// Gets the number of key/value pairs contained in the <see cref="Trie{TValue}"/>.
         /// </summary>
+        /// <returns>
+        /// The number of elements contained in the <see cref="Trie{TValue}"/>.
+        /// </returns>
         public int Count
         {
             get { return _count; }
         }
 
         /// <summary>
-        /// Obtient une valeur indiquant si le dictionnaire est en lecture seule.
+        /// Gets a value indicating whether the <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only.
         /// </summary>
-        public bool IsReadOnly
+        /// <returns>
+        /// true if the <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only; otherwise, false.
+        /// </returns>
+        bool ICollection<KeyValuePair<string, TValue>>.IsReadOnly
         {
             get { return false; }
         }
 
         /// <summary>
-        /// Détermine si le dictionnaire contient la clé spécifiée. 
+        /// Determines whether the <see cref="Trie{TValue}"/> contains an element with the specified key.
         /// </summary>
-        /// <param name="key">Clé à rechercher</param>
-        /// <returns>true si le dictionnaire contient un élément correspondant à la clé spécifiée ; sinon, false.</returns>
+        /// <returns>
+        /// true if the <see cref="Trie{TValue}"/> contains an element with the key; otherwise, false.
+        /// </returns>
+        /// <param name="key">The key to locate in the <see cref="Trie{TValue}"/>.</param>
+        /// <exception cref="T:System.ArgumentNullException"><paramref name="key"/> is null.</exception>
         public bool ContainsKey(string key)
         {
             if (key == null) throw new ArgumentNullException("key");
@@ -286,10 +307,12 @@ namespace GemBox
         }
 
         /// <summary>
-        /// Ajoute la clé et la valeur spécifiées au dictionnaire. 
+        /// Adds an element with the provided key and value to the <see cref="Trie{TValue}"/>.
         /// </summary>
-        /// <param name="key">Clé de l'élément à ajouter. </param>
-        /// <param name="value">Valeur de l'élément à ajouter. La valeur peut être null pour les types référence.</param>
+        /// <param name="key">The object to use as the key of the element to add.</param>
+        /// <param name="value">The object to use as the value of the element to add.</param>
+        /// <exception cref="T:System.ArgumentNullException"><paramref name="key"/> is null.</exception>
+        /// <exception cref="T:System.ArgumentException">An element with the same key already exists in the <see cref="Trie{TValue}"/>.</exception>
         public void Add(string key, TValue value)
         {
             if (key == null) throw new ArgumentNullException("key");
@@ -301,10 +324,13 @@ namespace GemBox
         }
 
         /// <summary>
-        /// Supprime du dictionnaire la valeur ayant la clé spécifiée. 
+        /// Removes the element with the specified key from the <see cref="Trie{TValue}"/>.
         /// </summary>
-        /// <param name="key">Clé de l'élément à supprimer.</param>
-        /// <returns>true si la recherche et la suppression de l'élément réussissent ; sinon, false.</returns>
+        /// <returns>
+        /// true if the element is successfully removed; otherwise, false.  This method also returns false if <paramref name="key"/> was not found in the original <see cref="Trie{TValue}"/>.
+        /// </returns>
+        /// <param name="key">The key of the element to remove.</param>
+        /// <exception cref="T:System.ArgumentNullException"><paramref name="key"/> is null.</exception>
         public bool Remove(string key)
         {
             var node = FindNode(key, false);
@@ -322,11 +348,14 @@ namespace GemBox
         }
 
         /// <summary>
-        /// Obtient la valeur associée à la clé spécifiée. 
+        /// Gets the value associated with the specified key.
         /// </summary>
-        /// <param name="key">Clé de la valeur à obtenir.</param>
-        /// <param name="value">Paramètre de sortie auquel est affecté la valeur trouvée</param>
-        /// <returns>true si le dictionnaire contient un élément correspondant à la clé spécifiée ; sinon, false.</returns>
+        /// <returns>
+        /// true if the <see cref="Trie{TValue}"/> contains an element with the specified key; otherwise, false.
+        /// </returns>
+        /// <param name="key">The key whose value to get.</param>
+        /// <param name="value">When this method returns, the value associated with the specified key, if the key is found; otherwise, the default value for the type of the <paramref name="value"/> parameter. This parameter is passed uninitialized.</param>
+        /// <exception cref="T:System.ArgumentNullException"><paramref name="key"/> is null.</exception>
         public bool TryGetValue(string key, out TValue value)
         {
             value = default(TValue);
@@ -342,10 +371,14 @@ namespace GemBox
         }
 
         /// <summary>
-        /// Obtient ou définit la valeur associée à la clé spécifiée.
+        /// Gets or sets the element with the specified key.
         /// </summary>
-        /// <param name="key">Clé de l'élément à obtenir ou à définir</param>
-        /// <value>Valeur associée à la clé spécifiée. Si la clé spécifiée est introuvable, une opération Get retourne KeyNotFoundException et une opération Set crée un nouvel élément avec la clé spécifiée.</value>
+        /// <returns>
+        /// The element with the specified key.
+        /// </returns>
+        /// <param name="key">The key of the element to get or set.</param>
+        /// <exception cref="T:System.ArgumentNullException"><paramref name="key"/> is null.</exception>
+        /// <exception cref="T:System.Collections.Generic.KeyNotFoundException">The property is retrieved and <paramref name="key"/> is not found.</exception>
         public TValue this[string key]
         {
             get
@@ -368,16 +401,22 @@ namespace GemBox
         }
 
         /// <summary>
-        /// Obtient une collection contenant les clés du dictionnaire.
+        /// Gets an <see cref="T:System.Collections.Generic.ICollection`1"/> containing the keys of the <see cref="Trie{TValue}"/>.
         /// </summary>
+        /// <returns>
+        /// An <see cref="T:System.Collections.Generic.ICollection`1"/> containing the keys of the <see cref="Trie{TValue}"/>.
+        /// </returns>
         public ICollection<string> Keys
         {
             get { return Enumerate(_rootNode, null).Select(kvp => kvp.Key).ToList(); }
         }
 
         /// <summary>
-        /// Obtient une collection contenant les valeurs du dictionnaire.
+        /// Gets an <see cref="T:System.Collections.Generic.ICollection`1"/> containing the values in the <see cref="Trie{TValue}"/>.
         /// </summary>
+        /// <returns>
+        /// An <see cref="T:System.Collections.Generic.ICollection`1"/> containing the values in the <see cref="Trie{TValue}"/>.
+        /// </returns>
         public ICollection<TValue> Values
         {
             get { return Enumerate(_rootNode, null).Select(kvp => kvp.Value).ToList(); }
