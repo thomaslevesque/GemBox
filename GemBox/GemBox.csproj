@@ -43,6 +43,12 @@
     <Compile Include="ComparerExternsions.cs" />
     <Compile Include="DateExtensions.cs" />
     <Compile Include="Interval.cs" />
+    <Compile Include="IO\NonClosingStreamWrapper.cs" />
+    <Compile Include="IO\StreamExtensions.cs" />
+    <Compile Include="IO\TeeStream.cs" />
+    <Compile Include="IO\TeeTextWriter.cs" />
+    <Compile Include="IO\TextReaderExtensions.cs" />
+    <Compile Include="IO\TextWriterExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Collections\Trie.cs" />
     <Compile Include="Text\EncodingExtensions.cs" />
