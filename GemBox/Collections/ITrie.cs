@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace GemBox
+namespace GemBox.Collections
 {
     public interface ITrie<TValue> : IDictionary<string, TValue>
     {
@@ -23,7 +23,7 @@ namespace GemBox
         /// Returns all key/value pairs whose key starts with the specified prefix.
         /// </summary>
         /// <param name="prefix">The prefix to search for.</param>
-        /// <returns>A sequence of all key/value pairs whose key starts with <c>prefix</c>.</returns>
+        /// <returns>A sequence of all key/value pairs whose key starts with <paramref name="prefix"/>.</returns>
         IEnumerable<KeyValuePair<string, TValue>> FindPrefix(string prefix);
 
         /// <summary>

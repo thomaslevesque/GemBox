@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace GemBox
+namespace GemBox.Collections
 {
     /// <summary>
     /// A Trie (prefix-tree) data structure that associates keys with values and
@@ -468,7 +468,7 @@ namespace GemBox
         /// Returns all key/value pairs whose key starts with the specified prefix.
         /// </summary>
         /// <param name="prefix">The prefix to search for.</param>
-        /// <returns>A sequence of all key/value pairs whose key starts with <c>prefix</c>.</returns>
+        /// <returns>A sequence of all key/value pairs whose key starts with <paramref name="prefix"/>.</returns>
         public IEnumerable<KeyValuePair<string, TValue>> FindPrefix(string prefix)
         {
             if (prefix == null) throw new ArgumentNullException("prefix");
