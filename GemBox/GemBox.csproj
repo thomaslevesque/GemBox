@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="Collections\ITrie.cs" />
     <Compile Include="ComparerExternsions.cs" />
+    <Compile Include="Data\DataExtensions.cs" />
     <Compile Include="DateExtensions.cs" />
     <Compile Include="Interval.cs" />
     <Compile Include="IO\NonClosingStreamWrapper.cs" />
