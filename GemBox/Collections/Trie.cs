@@ -123,7 +123,6 @@ namespace GemBox.Collections
             {
                 PartialKey = partialKey;
                 Parent = parent;
-                _children = new SortedDictionary<char, TrieNode>();
             }
 
             public TrieNode Parent { get; }
