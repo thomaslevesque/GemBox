@@ -1,11 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.30723.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.22310.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GemBox", "GemBox\GemBox.csproj", "{D06F3A01-51E3-4BA2-926A-3CF28C6E544E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GemBox.WinForms", "GemBox.WinForms\GemBox.WinForms.csproj", "{7B78FA49-C440-4634-BF4E-B3AF2CC7C3A6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sources", "Sources", "{25E21150-CA46-479A-B085-F039C908CBA5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{90EE7CC1-8364-4511-AFE8-89EACD582D40}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GemBox.UnitTests", "GemBox.UnitTests\GemBox.UnitTests.csproj", "{1394D83B-67CE-4579-841D-8D81C97E45BA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,8 +27,17 @@ Global
 		{7B78FA49-C440-4634-BF4E-B3AF2CC7C3A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7B78FA49-C440-4634-BF4E-B3AF2CC7C3A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7B78FA49-C440-4634-BF4E-B3AF2CC7C3A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1394D83B-67CE-4579-841D-8D81C97E45BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1394D83B-67CE-4579-841D-8D81C97E45BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1394D83B-67CE-4579-841D-8D81C97E45BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1394D83B-67CE-4579-841D-8D81C97E45BA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D06F3A01-51E3-4BA2-926A-3CF28C6E544E} = {25E21150-CA46-479A-B085-F039C908CBA5}
+		{7B78FA49-C440-4634-BF4E-B3AF2CC7C3A6} = {25E21150-CA46-479A-B085-F039C908CBA5}
+		{1394D83B-67CE-4579-841D-8D81C97E45BA} = {90EE7CC1-8364-4511-AFE8-89EACD582D40}
 	EndGlobalSection
 EndGlobal

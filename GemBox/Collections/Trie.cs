@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using GemBox.Threading;
 
 namespace GemBox.Collections
 {
@@ -14,7 +15,6 @@ namespace GemBox.Collections
     /// <c>p</c> is the length of the searched prefix.</remarks>
     public class Trie<TValue> : ITrie<TValue>
     {
-        private int _count;
         private readonly TrieNode _rootNode;
 
         /// <summary>
@@ -52,11 +52,14 @@ namespace GemBox.Collections
             if (root.HasValue)
                 yield return new KeyValuePair<string, TValue>(key, root.Value);
 
-            foreach (var kvp in root.Children)
+            if (root.HasChildren)
             {
-                foreach (var entry in Enumerate(kvp.Value, key))
+                foreach (var kvp in root.Children)
                 {
-                    yield return entry;
+                    foreach (var entry in Enumerate(kvp.Value, key))
+                    {
+                        yield return entry;
+                    }
                 }
             }
         }
@@ -68,8 +71,8 @@ namespace GemBox.Collections
             if (depth == key.Length)
                 return root;
 
-            TrieNode node;
-            if (root.Children.TryGetValue(key[depth], out node))
+            TrieNode node = null;
+            if (root.HasChildren && root.Children.TryGetValue(key[depth], out node))
                 return FindNode(node, key, depth + 1, create, out created);
 
             if (create)
@@ -104,45 +107,30 @@ namespace GemBox.Collections
             var current = removedNode;
             while (current != null)
             {
-                if (current.Children.Any() || current.HasValue)
+                if (current.HasChildren || current.HasValue)
                     break;
-                if (current.Parent != null)
-                {
-                    current.Parent.Children.Remove(current.PartialKey);
-                }
+                current.Parent?.Children.Remove(current.PartialKey);
                 current = current.Parent;
             }
         }
 
         class TrieNode
         {
-            private readonly char _partialKey;
             private TValue _value;
-            private bool _hasValue;
-            private readonly TrieNode _parent;
-            private readonly SortedDictionary<char, TrieNode> _children;
+            private SortedDictionary<char, TrieNode> _children;
 
             public TrieNode(char partialKey, TrieNode parent)
             {
-                _partialKey = partialKey;
-                _parent = parent;
+                PartialKey = partialKey;
+                Parent = parent;
                 _children = new SortedDictionary<char, TrieNode>();
             }
 
-            public TrieNode Parent
-            {
-                get { return _parent; }
-            }
+            public TrieNode Parent { get; }
 
-            public char PartialKey
-            {
-                get { return _partialKey; }
-            }
+            public char PartialKey { get; }
 
-            public bool HasValue
-            {
-                get { return _hasValue; }
-            }
+            public bool HasValue { get; private set; }
 
             public TValue Value
             {
@@ -150,18 +138,22 @@ namespace GemBox.Collections
                 set
                 {
                     _value = value;
-                    _hasValue = true;
+                    HasValue = true;
                 }
             }
 
             public void ClearValue()
             {
-                _hasValue = false;
+                HasValue = false;
             }
 
-            public IDictionary<char, TrieNode> Children
+            public IDictionary<char, TrieNode> Children => Atomic.LazyInit(ref _children);
+
+            public bool HasChildren => _children?.Any() ?? false;
+
+            public void ClearChildren()
             {
-                get { return _children; }
+                _children?.Clear();
             }
         }
 
@@ -208,8 +200,8 @@ namespace GemBox.Collections
         public void Clear()
         {
             _rootNode.ClearValue();
-            _rootNode.Children.Clear();
-            _count = 0;
+            _rootNode.ClearChildren();
+            Count = 0;
         }
 
         /// <summary>
@@ -236,7 +228,7 @@ namespace GemBox.Collections
         /// <exception cref="T:System.ArgumentException">The number of elements in the source <see cref="T:System.Collections.Generic.ICollection`1"/> is greater than the available space from <paramref name="arrayIndex"/> to the end of the destination <paramref name="array"/>.</exception>
         void ICollection<KeyValuePair<string, TValue>>.CopyTo(KeyValuePair<string, TValue>[] array, int arrayIndex)
         {
-            if (_count + arrayIndex > array.Length)
+            if (Count + arrayIndex > array.Length)
                 throw new ArgumentException("The destination array is not large enough");
             int index = arrayIndex;
             foreach (var item in Enumerate(_rootNode, null))
@@ -261,7 +253,7 @@ namespace GemBox.Collections
             if (node.HasValue && Equals(node.Value, item.Value))
             {
                 node.ClearValue();
-                _count--;
+                Count--;
                 return true;
             }
             return false;
@@ -273,10 +265,7 @@ namespace GemBox.Collections
         /// <returns>
         /// The number of elements contained in the <see cref="Trie{TValue}"/>.
         /// </returns>
-        public int Count
-        {
-            get { return _count; }
-        }
+        public int Count { get; private set; }
 
         /// <summary>
         /// Gets a value indicating whether the <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only.
@@ -284,10 +273,7 @@ namespace GemBox.Collections
         /// <returns>
         /// true if the <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only; otherwise, false.
         /// </returns>
-        bool ICollection<KeyValuePair<string, TValue>>.IsReadOnly
-        {
-            get { return false; }
-        }
+        bool ICollection<KeyValuePair<string, TValue>>.IsReadOnly => false;
 
         /// <summary>
         /// Determines whether the <see cref="Trie{TValue}"/> contains an element with the specified key.
@@ -320,7 +306,7 @@ namespace GemBox.Collections
             if (node.HasValue)
                 throw new ArgumentException("An element with the same key already exists in the trie.");
             node.Value = value;
-            _count++;
+            Count++;
         }
 
         /// <summary>
@@ -333,6 +319,7 @@ namespace GemBox.Collections
         /// <exception cref="T:System.ArgumentNullException"><paramref name="key"/> is null.</exception>
         public bool Remove(string key)
         {
+            if (key == null) throw new ArgumentNullException("key");
             var node = FindNode(key, false);
             if (node == null)
                 return false;
@@ -341,7 +328,7 @@ namespace GemBox.Collections
             {
                 node.ClearValue();
                 Prune(node);
-                _count--;
+                Count--;
                 return true;
             }
             return false;
@@ -396,7 +383,7 @@ namespace GemBox.Collections
                 var node = FindNode(key, true, out created);
                 node.Value = value;
                 if (created)
-                    _count++;
+                    Count++;
             }
         }
 
@@ -435,7 +422,7 @@ namespace GemBox.Collections
         {
             if (prefix == null) throw new ArgumentNullException("prefix");
             var node = FindNode(prefix, false);
-            return (node != null) && (node.HasValue || node.Children.Any());
+            return (node != null) && (node.HasValue || node.HasChildren);
         }
 
         /// <summary>
@@ -452,14 +439,14 @@ namespace GemBox.Collections
 
             int count = Enumerate(node, null).Count();
 
-            // Shouldn't happen if the tree is properly pruned...
+            // Shouldn't happen if the trie is properly pruned...
             if (count == 0)
                 return 0;
 
-            node.Children.Clear();
+            node.ClearChildren();
             node.ClearValue();
             Prune(node);
-            _count -= count;
+            Count -= count;
 
             return count;
         }
@@ -517,9 +504,15 @@ namespace GemBox.Collections
             if (addValueFactory == null) throw new ArgumentNullException("addValueFactory");
             if (updateValueFactory == null) throw new ArgumentNullException("updateValueFactory");
             var node = FindNode(key, true);
-            node.Value = node.HasValue
-                ? addValueFactory(key)
-                : updateValueFactory(key, node.Value);
+            if (node.HasValue)
+            {
+                node.Value = updateValueFactory(key, node.Value);
+            }
+            else
+            {
+                node.Value = addValueFactory(key);
+                Count++;
+            }
             return node.Value;
         }
 
