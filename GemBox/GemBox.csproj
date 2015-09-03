@@ -62,6 +62,7 @@
     <Compile Include="Collections\Trie.cs" />
     <Compile Include="Text\EncodingExtensions.cs" />
     <Compile Include="Threading\Atomic.cs" />
+    <Compile Include="TypeSwitch.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
