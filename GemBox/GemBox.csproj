@@ -43,7 +43,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Collections\IndexedCollection.cs" />
+    <Compile Include="Collections\IOrderedDictionary.cs" />
     <Compile Include="Collections\ITrie.cs" />
+    <Compile Include="Collections\MappingCollection.cs" />
+    <Compile Include="Collections\OrderedDictionary.cs" />
     <Compile Include="ComparerExternsions.cs" />
     <Compile Include="Configuration\ConfigurationExtensions.cs" />
     <Compile Include="Data\DataExtensions.cs" />
