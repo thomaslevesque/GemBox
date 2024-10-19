@@ -38,7 +38,7 @@ namespace GemBox.UnitTests
                 string key = null;
                 // ReSharper disable once ExpressionIsAlwaysNull
                 Action action = () => trie[key].Ignore();
-                action.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be("key");
+                action.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("key");
             }
 
             public void Indexer_Set_Should_Throw_If_Key_Is_Null()
@@ -48,7 +48,7 @@ namespace GemBox.UnitTests
                 string key = null;
                 // ReSharper disable once ExpressionIsAlwaysNull
                 Action action = () => trie[key] = 42;
-                action.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be("key");
+                action.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("key");
             }
 
             public void AddOrUpdate_Should_Throw_If_Args_Are_Null()
@@ -105,7 +105,7 @@ namespace GemBox.UnitTests
                 var trie = new Trie<int>();
                 trie.Add("foo", 42);
                 Action action = () => trie.Add("foo", 123);
-                action.ShouldThrow<ArgumentException>();
+                action.Should().Throw<ArgumentException>();
             }
 
             public void Remove_Should_Return_True_And_Remove_Key_If_Key_Is_Found()
@@ -140,7 +140,7 @@ namespace GemBox.UnitTests
             {
                 var trie = new Trie<int> {{"a", 42}, {"ab", 123}, {"abc", 999}, {"foo", 0}};
                 Action action = () => trie["bar"].Ignore();
-                action.ShouldThrow<KeyNotFoundException>();
+                action.Should().Throw<KeyNotFoundException>();
             }
 
             public void Indexer_Should_Add_Value_If_Key_Is_Not_Found()

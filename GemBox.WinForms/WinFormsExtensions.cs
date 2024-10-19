@@ -183,7 +183,7 @@ namespace GemBox.WinForms
         {
             if (SystemInfo.SupportsElevation)
             {
-                SendMessage(b.Handle, BcmSetshield, 0, 0x00000000);
+                SendMessage(b.Handle, BcmSetshield, 0u, 0x00000000);
             }
         }
 

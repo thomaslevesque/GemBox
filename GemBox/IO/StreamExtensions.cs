@@ -50,11 +50,13 @@ namespace GemBox.IO
             return buffer;
         }
 
+        #if false
         public static Stream SuppressClose(this Stream stream)
         {
             if (stream == null) throw new ArgumentNullException("stream");
             return new NonClosingStreamWrapper(stream);
         }
+        #endif
 
         public static Stream Tee(this Stream stream, Stream other, params Stream[] others)
         {

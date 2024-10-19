@@ -29,7 +29,7 @@ namespace GemBox.UnitTests
                 var call = Expression.Call(realCall.Object, realCall.Method, args);
                 var lambda = Expression.Lambda<Action>(call);
                 var action = lambda.Compile();
-                action.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be(paramName);
+                action.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be(paramName);
             }
         }
     }
