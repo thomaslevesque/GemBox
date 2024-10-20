@@ -1,0 +1,77 @@
+﻿<Window x:Class="WpfDemoApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfDemoApp"
+        xmlns:gembox="https://thomaslevesque.net/gembox"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800"
+        Name="thisWindow">
+    <Grid>
+        <TabControl TabStripPlacement="Left">
+            <TabControl.Items>
+                <TabItem Header="RatingControl">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+
+                        <StackPanel Orientation="Vertical" Grid.Row="0">
+                            <StackPanel Orientation="Horizontal">
+                                <Label>Rating mode</Label>
+                                <ComboBox SelectedItem="{Binding RatingMode, ElementName=rc, Mode=TwoWay}">
+                                    <ComboBox.Items>
+                                        <gembox:RatingMode>Integer</gembox:RatingMode>
+                                        <gembox:RatingMode>HalfPoint</gembox:RatingMode>
+                                        <gembox:RatingMode>Decimal</gembox:RatingMode>
+                                    </ComboBox.Items>
+                                </ComboBox>
+                            </StackPanel>
+                        </StackPanel>
+                        <gembox:RatingControl Name="rc" Grid.Row="1" Width="150" Height="30" />
+                    </Grid>
+                </TabItem>
+                <TabItem Header="FormView">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+
+                        <StackPanel Orientation="Vertical" Grid.Row="0">
+                            <CheckBox IsChecked="{Binding IsInEditMode, ElementName=fv, Mode=TwoWay}">Edit mode</CheckBox>
+                        </StackPanel>
+                        <gembox:FormView Name="fv" Grid.Row="1" DataContext="{Binding Movie, ElementName=thisWindow}">
+                            <gembox:TextFormField Header="Title" Binding="{Binding Title}" />
+                            <gembox:ComboBoxFormField Header="Media type" Binding="{Binding MediaType}" ItemsSource="{gembox:EnumValues local:MediaType}" />
+                            <gembox:TextFormField Header="Director" Binding="{Binding Director}" />
+                            <gembox:CheckBoxFormField Header="In stock" Binding="{Binding InStock}" />
+                            <gembox:FormField Header="Rating">
+                                <gembox:FormField.EditorTemplate>
+                                    <DataTemplate>
+                                        <gembox:RatingControl Name="rating"
+                                                              Value="{Binding Rating}"
+                                                              RatingMode="Decimal"
+                                                              Stretch="None" HorizontalAlignment="Left"/>
+                                    </DataTemplate>
+                                </gembox:FormField.EditorTemplate>
+                                <gembox:FormField.DisplayTemplate>
+                                    <DataTemplate>
+                                        <gembox:RatingControl Name="rating"
+                                                              Value="{Binding Rating}"
+                                                              RatingMode="Decimal"
+                                                              Stretch="None" HorizontalAlignment="Left"
+                                                              IsReadOnly="True"/>
+                                    </DataTemplate>
+                                </gembox:FormField.DisplayTemplate>
+                            </gembox:FormField>
+                            <gembox:DateFormField Header="Release date" Binding="{Binding ReleaseDate}" />
+                        </gembox:FormView>
+                    </Grid>
+                </TabItem>
+            </TabControl.Items>
+        </TabControl>
+    </Grid>
+</Window>

@@ -1,0 +1,68 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:GemBox.WPF.Controls">
+
+    <Style TargetType="{x:Type local:RatingControl}">
+        <Setter Property="ImageOn" Value="pack://application:,,,/GemBox.WPF;component/Images/star_on.png" />
+        <Setter Property="ImageOff" Value="pack://application:,,,/GemBox.WPF;component/Images/star_off.png" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:RatingControl}">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <Grid Name="PART_RatingHost"
+                              ToolTip="{Binding HoverValue, RelativeSource={x:Static RelativeSource.TemplatedParent}, Mode=OneWay}">
+                            <UniformGrid Columns="5">
+                                <Image Stretch="{TemplateBinding Stretch}" Source="{TemplateBinding ImageOff}" />
+                                <Image Stretch="{TemplateBinding Stretch}" Source="{TemplateBinding ImageOff}" />
+                                <Image Stretch="{TemplateBinding Stretch}" Source="{TemplateBinding ImageOff}" />
+                                <Image Stretch="{TemplateBinding Stretch}" Source="{TemplateBinding ImageOff}" />
+                                <Image Stretch="{TemplateBinding Stretch}" Source="{TemplateBinding ImageOff}" />
+                            </UniformGrid>
+                            <Border Name="ratingBorder" HorizontalAlignment="Left" ClipToBounds="True">
+                                <Border.Width>
+                                    <MultiBinding Converter="{x:Static local:RatingControl.WidthConverter}">
+                                        <Binding Path="Value" RelativeSource="{x:Static RelativeSource.TemplatedParent}" />
+                                        <Binding Path="ActualWidth" RelativeSource="{x:Static RelativeSource.TemplatedParent}" />
+                                    </MultiBinding>
+                                </Border.Width>
+                                <UniformGrid Columns="5" Width="{Binding ActualWidth, ElementName=PART_RatingHost}">
+                                    <Image Stretch="{TemplateBinding Stretch}" Source="{TemplateBinding ImageOn}" />
+                                    <Image Stretch="{TemplateBinding Stretch}" Source="{TemplateBinding ImageOn}" />
+                                    <Image Stretch="{TemplateBinding Stretch}" Source="{TemplateBinding ImageOn}" />
+                                    <Image Stretch="{TemplateBinding Stretch}" Source="{TemplateBinding ImageOn}" />
+                                    <Image Stretch="{TemplateBinding Stretch}" Source="{TemplateBinding ImageOn}" />
+                                </UniformGrid>
+                            </Border>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsMouseOver" Value="True" />
+                                <Condition Property="IsReadOnly" Value="False" />
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="ratingBorder" Property="Width">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{x:Static local:RatingControl.WidthConverter}">
+                                        <Binding Path="HoverValue" RelativeSource="{x:Static RelativeSource.TemplatedParent}" />
+                                        <Binding Path="ActualWidth" RelativeSource="{x:Static RelativeSource.TemplatedParent}" />
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                        </MultiTrigger>
+                        <Trigger Property="IsReadOnly" Value="True">
+                            <Setter TargetName="PART_RatingHost" Property="ToolTip">
+                                <Setter.Value>
+                                    <Binding Path="Value" RelativeSource="{x:Static RelativeSource.TemplatedParent}" Mode="OneWay" />
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>
